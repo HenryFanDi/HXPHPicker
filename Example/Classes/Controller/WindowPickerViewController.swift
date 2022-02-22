@@ -124,7 +124,7 @@ class WindowPickerViewController: UIViewController {
         let originalTitleLb = UILabel(frame: CGRect(origin: .zero, size: CGSize(width: 80, height: 30)))
         originalTitleLb.text = "原图"
         originalTitleLb.textColor = UIColor(hexString: "#07C160")
-        originalTitleLb.font = UIFont.systemFont(ofSize: 16)
+        originalTitleLb.font = Lato.regular.headline
         return originalTitleLb
     }()
     lazy var boxControl: SelectBoxView = {
@@ -204,7 +204,7 @@ class WindowPickerViewController: UIViewController {
         label.text = "拖到此区域发送"
         label.textColor = .white
         label.textAlignment = .center
-        label.font = .systemFont(ofSize: 18)
+        label.font = Lato.regular.largeHeadline
         return label
     }()
     

@@ -122,7 +122,7 @@ class PhotoPickerBottomView: UIToolbar, PhotoPreviewSelectedViewDelegate {
     lazy var promptLb: UILabel = {
         let promptLb = UILabel.init(frame: CGRect(x: 0, y: 0, width: 0, height: 60))
         promptLb.text = "无法访问相册中所有照片，\n请允许访问「照片」中的「所有照片」".localized
-        promptLb.font = UIFont.systemFont(ofSize: 15)
+        promptLb.font = Lato.regular.headline
         promptLb.numberOfLines = 0
         promptLb.adjustsFontSizeToFitWidth = true
         return promptLb
@@ -154,7 +154,7 @@ class PhotoPickerBottomView: UIToolbar, PhotoPreviewSelectedViewDelegate {
     lazy var previewBtn: UIButton = {
         let previewBtn = UIButton.init(type: .custom)
         previewBtn.setTitle("预览".localized, for: .normal)
-        previewBtn.titleLabel?.font = UIFont.systemFont(ofSize: 17)
+        previewBtn.titleLabel?.font = Lato.regular.largeHeadline
         previewBtn.isEnabled = false
         previewBtn.addTarget(self, action: #selector(didPreviewButtonClick(button:)), for: .touchUpInside)
         previewBtn.isHidden = config.previewButtonHidden
@@ -175,7 +175,7 @@ class PhotoPickerBottomView: UIToolbar, PhotoPreviewSelectedViewDelegate {
     lazy var editBtn: UIButton = {
         let editBtn = UIButton.init(type: .custom)
         editBtn.setTitle("编辑".localized, for: .normal)
-        editBtn.titleLabel?.font = UIFont.systemFont(ofSize: 17)
+        editBtn.titleLabel?.font = Lato.regular.largeHeadline
         editBtn.addTarget(self, action: #selector(didEditBtnButtonClick(button:)), for: .touchUpInside)
         editBtn.isHidden = config.editButtonHidden
         editBtn.height = 50
@@ -289,7 +289,7 @@ class PhotoPickerBottomView: UIToolbar, PhotoPreviewSelectedViewDelegate {
     lazy var originalTitleLb: UILabel = {
         let originalTitleLb = UILabel.init()
         originalTitleLb.text = "原图".localized
-        originalTitleLb.font = UIFont.systemFont(ofSize: 17)
+        originalTitleLb.font = Lato.regular.largeHeadline
         originalTitleLb.lineBreakMode = .byTruncatingHead
         return originalTitleLb
     }()

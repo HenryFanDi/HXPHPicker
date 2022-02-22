@@ -315,10 +315,10 @@ extension PhotoTools {
     }
     
     // swiftlint:disable function_body_length
-    public static func getBRPickerConfig() -> PickerConfiguration {
+    public static func getBRPickerConfig(langurageType: LanguageType = .english) -> PickerConfiguration {
         // swiftlint:enable function_body_length
         let config = PickerConfiguration()
-        PhotoManager.shared.createLanguageBundle(languageType: config.languageType)
+        PhotoManager.shared.createLanguageBundle(languageType: langurageType)
         
         config.maximumSelectedVideoCount = 1
         config.selectMode = .single

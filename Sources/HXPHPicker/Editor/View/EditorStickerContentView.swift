@@ -160,8 +160,8 @@ class EditorStickerContentView: UIView {
     }()
     lazy var textLayer: CATextLayer = {
         let textLayer = CATextLayer()
-        let fontSize: CGFloat = 25
-        let font = UIFont.boldSystemFont(ofSize: fontSize)
+        let fontSize: CGFloat = 24
+        let font = Lato.bold.title2
         textLayer.font = font
         textLayer.fontSize = fontSize
         textLayer.foregroundColor = UIColor.white.cgColor

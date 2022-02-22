@@ -109,7 +109,7 @@ class CameraBottomView: UIView {
         button.setTitle("照片".localized, for: .normal)
         button.setTitleColor(.white.withAlphaComponent(0.5), for: .normal)
         button.setTitleColor(.white, for: .selected)
-        button.titleLabel?.font = .systemFont(ofSize: 15)
+        button.titleLabel?.font = Lato.regular.headline
         button.addTarget(self, action: #selector(didPhotoButtonClick), for: .touchUpInside)
         return button
     }()
@@ -130,7 +130,7 @@ class CameraBottomView: UIView {
         button.setTitle("视频".localized, for: .normal)
         button.setTitleColor(.white.withAlphaComponent(0.5), for: .normal)
         button.setTitleColor(.white, for: .selected)
-        button.titleLabel?.font = .systemFont(ofSize: 15)
+        button.titleLabel?.font = Lato.regular.headline
         button.addTarget(self, action: #selector(didVideoButtonClick), for: .touchUpInside)
         return button
     }()

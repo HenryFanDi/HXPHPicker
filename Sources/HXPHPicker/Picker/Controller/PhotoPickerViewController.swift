@@ -105,7 +105,7 @@ public class PhotoPickerViewController: BaseViewController {
     }()
     lazy var titleLabel: UILabel = {
         let titleLabel = UILabel.init()
-        titleLabel.font = UIFont.boldSystemFont(ofSize: 18)
+        titleLabel.font = Lato.bold.largeHeadline
         titleLabel.textAlignment = .center
         return titleLabel
     }()

@@ -87,7 +87,7 @@ final class ProgressHUD: UIView {
         let textLb = UILabel.init()
         textLb.textColor = .white
         textLb.textAlignment = .center
-        textLb.font = UIFont.systemFont(ofSize: 16)
+        textLb.font = Lato.regular.headline
         textLb.numberOfLines = 0
         return textLb
     }()

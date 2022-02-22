@@ -145,7 +145,7 @@ class PreviewVideoSliderView: UIView, SliderViewDelegate {
         label.text = "--:--"
         label.textColor = .white
         label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 15)
+        label.font = Lato.regular.headline
         return label
     }()
     
@@ -154,7 +154,7 @@ class PreviewVideoSliderView: UIView, SliderViewDelegate {
         label.text = "--:--"
         label.textColor = .white
         label.textAlignment = .center
-        label.font = UIFont.systemFont(ofSize: 15)
+        label.font = Lato.regular.headline
         return label
     }()
     

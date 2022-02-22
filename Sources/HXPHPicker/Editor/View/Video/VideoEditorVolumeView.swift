@@ -29,7 +29,7 @@ class VideoEditorVolumeView: UIView {
         let label = UILabel()
         label.text = "配乐".localized
         label.textColor = .white
-        label.font = .systemFont(ofSize: 15)
+        label.font = Lato.regular.headline
         label.adjustsFontSizeToFitWidth = true
         return label
     }()
@@ -52,7 +52,7 @@ class VideoEditorVolumeView: UIView {
         let label = UILabel()
         label.text = "100"
         label.textColor = .white
-        label.font = .systemFont(ofSize: 15)
+        label.font = Lato.regular.headline
         return label
     }()
     
@@ -60,7 +60,7 @@ class VideoEditorVolumeView: UIView {
         let label = UILabel()
         label.text = "视频原声".localized
         label.textColor = .white
-        label.font = .systemFont(ofSize: 15)
+        label.font = Lato.regular.headline
         label.adjustsFontSizeToFitWidth = true
         return label
     }()
@@ -83,7 +83,7 @@ class VideoEditorVolumeView: UIView {
         let label = UILabel()
         label.text = "100"
         label.textColor = .white
-        label.font = .systemFont(ofSize: 15)
+        label.font = Lato.regular.headline
         return label
     }()
     

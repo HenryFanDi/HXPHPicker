@@ -32,7 +32,7 @@ class EditorStickerTrashView: UIView {
         textLb.text = "拖动到此处删除".localized
         textLb.textColor = .white
         textLb.textAlignment = .center
-        textLb.font = UIFont.systemFont(ofSize: 14)
+        textLb.font = Lato.regular.body
         textLb.adjustsFontSizeToFitWidth = true
         return textLb
     }()

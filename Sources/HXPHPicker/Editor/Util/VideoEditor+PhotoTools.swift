@@ -539,13 +539,13 @@ extension PhotoTools {
         for (index, lyric) in music.lyrics.enumerated() {
             let textLayer = CATextLayer()
             textLayer.string = lyric.lyric
-            let font = UIFont.boldSystemFont(ofSize: fontSize)
+            let font = Lato.bold.title2
             let lyricHeight = lyric.lyric.height(ofFont: font, maxWidth: size.width)
             if textSize.height < lyricHeight {
                 textSize.height = lyricHeight + 1
             }
             textLayer.font = font
-            textLayer.fontSize = fontSize
+            textLayer.fontSize = 24
             textLayer.isWrapped = true
             textLayer.truncationMode = .end
             textLayer.contentsScale = UIScreen.main.scale

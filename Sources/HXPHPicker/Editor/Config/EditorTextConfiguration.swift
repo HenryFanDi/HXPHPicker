@@ -13,7 +13,7 @@ public struct EditorTextConfiguration {
     /// 确定按钮背景颜色、文本光标颜色
     public var tintColor: UIColor = .systemTintColor
     /// 文本字体
-    public var font: UIFont = .boldSystemFont(ofSize: 25)
+    public var font: UIFont = Lato.bold.title2
     /// 最大字数限制，0为不限制
     public var maximumLimitTextLength: Int = 0
     /// 文本视图推出样式

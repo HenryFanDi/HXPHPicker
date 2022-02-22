@@ -159,7 +159,7 @@ public extension HXPickerWrapper where Base == String {
     /// - Returns: 字符串宽度
     func width(ofSize size: CGFloat, maxHeight: CGFloat) -> CGFloat {
         width(
-            ofFont: UIFont.systemFont(ofSize: size),
+            ofFont: UIFont.regularPingFang(ofSize: size),
             maxHeight: maxHeight
         )
     }
@@ -184,7 +184,7 @@ public extension HXPickerWrapper where Base == String {
     /// - Returns: 高度
     func height(ofSize size: CGFloat, maxWidth: CGFloat) -> CGFloat {
         height(
-            ofFont: UIFont.systemFont(ofSize: size),
+            ofFont: UIFont.regularPingFang(ofSize: size),
             maxWidth: maxWidth
         )
     }

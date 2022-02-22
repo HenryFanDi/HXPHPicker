@@ -45,7 +45,7 @@ final class EditorStickerTextViewController: BaseViewController {
         let button = UIButton(type: .system)
         button.setTitle("取消".localized, for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 17)
+        button.titleLabel?.font = Lato.bold.headline
         button.size = CGSize(width: 60, height: 30)
         button.addTarget(self, action: #selector(didCancelButtonClick), for: .touchUpInside)
         return button
@@ -60,8 +60,8 @@ final class EditorStickerTextViewController: BaseViewController {
         let text = "完成".localized
         button.setTitle(text, for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 17)
-        var textWidth = text.width(ofFont: .systemFont(ofSize: 17), maxHeight: 30)
+        button.titleLabel?.font = Lato.bold.headline
+        var textWidth = text.width(ofFont: Lato.regular.largeHeadline, maxHeight: 30)
         if textWidth < 60 {
             textWidth = 60
         }else {
