@@ -19,7 +19,9 @@ protocol CameraBottomViewDelegate: AnyObject {
 }
 
 class CameraBottomView: UIView {
+    
     weak var delegate: CameraBottomViewDelegate?
+    
     lazy var backButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage("hx_camera_down_back".image, for: .normal)
@@ -29,37 +31,42 @@ class CameraBottomView: UIView {
         button.imageView?.tintColor = .white
         return button
     }()
+    
     lazy var maskLayer: CAGradientLayer = {
         let layer = PhotoTools.getGradientShadowLayer(false)
         return layer
     }()
+    
     lazy var takeMaskLayer: CAShapeLayer = {
         let takeLayer = CAShapeLayer()
         takeLayer.contentsScale = UIScreen.main.scale
         takeLayer.fillColor = UIColor.clear.cgColor
-        takeLayer.lineWidth = 5
+        takeLayer.lineWidth = 4
         takeLayer.strokeColor = color.cgColor
         takeLayer.isHidden = true
         return takeLayer
     }()
+    
     lazy var takeBgView: UIVisualEffectView = {
         let effect = UIBlurEffect(style: .extraLight)
         let view = UIVisualEffectView(effect: effect)
-        view.size = CGSize(width: 80, height: 80)
+        view.size = CGSize(width: 78, height: 78)
         view.layer.cornerRadius = view.width * 0.5
         view.layer.masksToBounds = true
         view.layer.addSublayer(takeMaskLayer)
         return view
     }()
+    
     lazy var takeView: UIView = {
         let view = UIView()
-        view.size = CGSize(width: 60, height: 60)
-        view.backgroundColor = .white
+        view.size = CGSize(width: 64, height: 64)
+        view.backgroundColor = takeVideoColor
         view.isUserInteractionEnabled = false
         view.layer.cornerRadius = view.width * 0.5
         view.layer.masksToBounds = true
         return view
     }()
+    
     lazy var tapGesture: UITapGestureRecognizer = {
         let tapGesture = UITapGestureRecognizer(
             target: self,
@@ -68,6 +75,7 @@ class CameraBottomView: UIView {
         tapGesture.isEnabled = false
         return tapGesture
     }()
+    
     lazy var longPress: UILongPressGestureRecognizer = {
         let longPress = UILongPressGestureRecognizer(
             target: self,
@@ -76,6 +84,7 @@ class CameraBottomView: UIView {
         longPress.isEnabled = false
         return longPress
     }()
+    
     lazy var tipLb: UILabel = {
         let label = UILabel()
         label.textColor = .white
@@ -87,11 +96,13 @@ class CameraBottomView: UIView {
         label.shadowOffset = CGSize(width: 0, height: 1)
         return label
     }()
+    
     lazy var typeView: UIView = {
         let view = UIView()
         view.backgroundColor = .clear
         return view
     }()
+    
     lazy var photoButton: UIButton = {
         let button = UIButton(type: .custom)
         button.setTitle("照片".localized, for: .normal)
@@ -101,6 +112,7 @@ class CameraBottomView: UIView {
         button.addTarget(self, action: #selector(didPhotoButtonClick), for: .touchUpInside)
         return button
     }()
+    
     @objc
     func didPhotoButtonClick() {
         if isTaking || isRecording {
@@ -111,6 +123,7 @@ class CameraBottomView: UIView {
         takeType = .photo
         delegate?.bottomView(self, didChangeTakeType: takeType)
     }
+    
     lazy var videoButton: UIButton = {
         let button = UIButton(type: .custom)
         button.setTitle("视频".localized, for: .normal)
@@ -120,6 +133,7 @@ class CameraBottomView: UIView {
         button.addTarget(self, action: #selector(didVideoButtonClick), for: .touchUpInside)
         return button
     }()
+    
     @objc
     func didVideoButtonClick() {
         if isTaking || isRecording {
@@ -130,6 +144,7 @@ class CameraBottomView: UIView {
         takeType = .video
         delegate?.bottomView(self, didChangeTakeType: takeType)
     }
+    
     lazy var videoTimeLb: UILabel = {
         let label = UILabel()
         label.alpha = 0
@@ -143,19 +158,50 @@ class CameraBottomView: UIView {
         label.isUserInteractionEnabled = false
         return label
     }()
+    
+    lazy var leftItemStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.spacing = 8
+        stackView.distribution = .fillEqually
+        stackView.isLayoutMarginsRelativeArrangement = true
+        stackView.layoutMargins = .zero
+        return stackView
+    }()
+    
+    lazy var rightItemStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.spacing = 8
+        stackView.distribution = .fillEqually
+        stackView.isLayoutMarginsRelativeArrangement = true
+        stackView.layoutMargins = .zero
+        return stackView
+    }()
+    
     var isGestureEnable: Bool = false {
         didSet {
             tapGesture.isEnabled = isGestureEnable
             longPress.isEnabled = isGestureEnable
         }
     }
+    
+    private let takeVideoColor: UIColor = "#FF5555".color
+    
     var isTaking: Bool = false
+    
     var isRecording: Bool = false
+    
     var longPressBeganPoint: CGPoint = .zero
+    
     let color: UIColor
+    
     let takePhotoMode: CameraConfiguration.TakePhotoMode
+    
     var captureType: CameraController.CaptureType?
+    
     var takeType: CameraBottomViewTakeType = .photo
+    
     init(
         tintColor: UIColor,
         takePhotoMode: CameraConfiguration.TakePhotoMode
@@ -164,10 +210,12 @@ class CameraBottomView: UIView {
         self.takePhotoMode = takePhotoMode
         super.init(frame: .zero)
         layer.addSublayer(maskLayer)
-        addSubview(backButton)
         addSubview(takeBgView)
         addSubview(takeView)
         addSubview(tipLb)
+        addSubview(leftItemStackView)
+        addSubview(rightItemStackView)
+        
         if takePhotoMode == .click {
             addSubview(typeView)
         }
@@ -193,8 +241,8 @@ class CameraBottomView: UIView {
             if takePhotoMode == .press {
                 takeBgView.addGestureRecognizer(longPress)
                 tipLb.text = "按住摄像".localized
-            }else {
-                takeMaskLayer.lineWidth = 10
+            } else {
+                takeMaskLayer.lineWidth = 4
                 takeMaskLayer.strokeEnd = 1
                 takeMaskLayer.isHidden = false
                 takeBgView.layer.mask = takeMaskLayer
@@ -209,8 +257,8 @@ class CameraBottomView: UIView {
             if takePhotoMode == .press {
                 takeBgView.addGestureRecognizer(longPress)
                 tipLb.text = "轻触拍照，按住摄像".localized
-            }else {
-                takeMaskLayer.lineWidth = 10
+            } else {
+                takeMaskLayer.lineWidth = 4
                 takeMaskLayer.strokeEnd = 1
                 takeMaskLayer.isHidden = false
                 takeBgView.layer.mask = takeMaskLayer
@@ -258,7 +306,7 @@ class CameraBottomView: UIView {
                 backButton.isUserInteractionEnabled = false
                 delegate?.bottomView(longPressDidBegan: self)
                 UIView.animate(withDuration: 0.25) {
-                    self.takeView.backgroundColor = self.color
+                    self.takeView.backgroundColor = self.takeVideoColor
                     self.takeView.transform = CGAffineTransform(scaleX: 0.6, y: 0.6)
                 } completion: { _ in
                     if self.isRecording {
@@ -335,7 +383,7 @@ class CameraBottomView: UIView {
         if takePhotoMode == .press {
             takeMaskLayer.removeAllAnimations()
             takeMaskLayer.isHidden = true
-        }else {
+        } else {
             UIView.animate(withDuration: 0.2) {
                 self.videoTimeLb.alpha = 0
                 self.typeView.alpha = 1
@@ -349,7 +397,7 @@ class CameraBottomView: UIView {
         UIView.animate(withDuration: 0.25) {
             self.takeBgView.transform = .identity
             self.takeView.transform = .identity
-            self.takeView.backgroundColor = .white
+            self.takeView.backgroundColor = self.takeVideoColor
         }
     }
     func updateVideoTime(_ time: TimeInterval) {
@@ -377,6 +425,7 @@ class CameraBottomView: UIView {
 //        maskAnimation.delegate = self
         takeMaskLayer.add(maskAnimation, forKey: "takeMaskLayer")
     }
+    
     func setTakeMaskLayerPath() {
         let path = UIBezierPath(
             arcCenter: CGPoint(
@@ -390,17 +439,20 @@ class CameraBottomView: UIView {
         )
         takeMaskLayer.path = path.cgPath
     }
+    
     func hiddenTip() {
         UIView.animate(withDuration: 0.25, delay: 1.5) {
             self.tipLb.alpha = 0
         }
     }
+    
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
         if typeView.frame.contains(point) && takePhotoMode == .click {
             return true
         }
         return super.point(inside: point, with: event)
     }
+    
     override func layoutSubviews() {
         super.layoutSubviews()
         maskLayer.frame = CGRect(x: 0, y: -20, width: width, height: height + 20)
@@ -408,6 +460,15 @@ class CameraBottomView: UIView {
         backButton.centerY = height * 0.5
         takeBgView.center = CGPoint(x: width * 0.5, y: height * 0.5)
         takeView.center = CGPoint(x: width * 0.5, y: height * 0.5)
+        
+        let itemHeight = 56.0
+        let itemOffsetY = (height - itemHeight) / 2.0
+        let minX = takeBgView.frame.minX
+        leftItemStackView.frame = CGRect(x: 0, y: itemOffsetY, width: minX, height: itemHeight)
+        
+        let maxX = takeBgView.frame.maxX
+        rightItemStackView.frame = CGRect(x: maxX, y: itemOffsetY, width: width - maxX, height: itemHeight)
+        
         tipLb.frame = CGRect(
             x: UIDevice.leftMargin + 15,
             y: takeBgView.y - 40,
@@ -445,16 +506,36 @@ class CameraBottomView: UIView {
     }
 }
 
+// MARK: -
+
+extension CameraBottomView {
+    
+    func addLeftItems(_ items: [UIView]) {
+        items.forEach {
+            leftItemStackView.addArrangedSubview($0)
+        }
+    }
+    
+    func addRightItems(_ items: [UIView]) {
+        items.forEach {
+            rightItemStackView.addArrangedSubview($0)
+        }
+    }
+}
+
+// MARK: -
+
 public enum CameraBottomViewTakeType {
     case photo
     case video
 }
+
 //    extension CameraBottomView: CAAnimationDelegate {
 //        func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
 //            if anim == takeMaskLayer.animation(forKey: "takeMaskLayer") && flag {
 //                delegate?.bottomView(endRecording: self)
 //                stopRecord()
-//            }else {
+//            } else {
 //                takeMaskLayer.removeAllAnimations()
 //            }
 //        }

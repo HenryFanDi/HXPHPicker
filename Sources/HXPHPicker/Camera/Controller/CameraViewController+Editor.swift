@@ -31,15 +31,14 @@ extension CameraViewController: PhotoEditorViewControllerDelegate {
     }
 }
 extension CameraViewController: VideoEditorViewControllerDelegate {
-    func openVideoEditor(_ videoURL: URL) {
-        let vc = VideoEditorViewController(
-            videoURL: videoURL,
-            config: config.videoEditor
-        )
-        vc.autoBack = autoDismiss
-        vc.delegate = self
-        navigationController?.pushViewController(vc, animated: false)
+    
+    func openVideoEditor(with nav: UINavigationController?, videoURL: URL) {
+        let videoEditorViewController = VideoEditorViewController(videoURL: videoURL, config: config.videoEditor)
+        videoEditorViewController.autoBack = autoDismiss
+        videoEditorViewController.delegate = self
+        nav?.pushViewController(videoEditorViewController, animated: true)
     }
+    
     public func videoEditorViewController(
         _ videoEditorViewController: VideoEditorViewController,
         didFinish result: VideoEditResult
