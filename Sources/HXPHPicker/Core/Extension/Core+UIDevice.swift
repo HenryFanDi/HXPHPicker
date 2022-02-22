@@ -30,9 +30,17 @@ extension UIDevice {
         }
         return statusBarHeight + 44
     }
+    
     class var generalStatusBarHeight: CGFloat {
         isAllIPhoneX ? 44 : 20
     }
+    
+    class var safeAreaInsets: UIEdgeInsets { UIApplication.shared.windows.first?.safeAreaInsets ?? .zero }
+    
+    class var videoTopPadding: CGFloat { safeAreaInsets.top }
+    
+    class var previewTopPadding: CGFloat { 8.0 }
+    
     class var statusBarHeight: CGFloat {
         let statusBarHeight: CGFloat
         let window = UIApplication.shared.windows.first
