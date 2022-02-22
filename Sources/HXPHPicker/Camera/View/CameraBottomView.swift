@@ -94,6 +94,7 @@ class CameraBottomView: UIView {
         label.adjustsFontSizeToFitWidth = true
         label.shadowColor = UIColor.black.withAlphaComponent(0.6)
         label.shadowOffset = CGSize(width: 0, height: 1)
+        label.isHidden = true
         return label
     }()
     
