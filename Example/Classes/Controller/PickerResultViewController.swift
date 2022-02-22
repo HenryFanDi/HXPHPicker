@@ -49,7 +49,7 @@ class PickerResultViewController: UIViewController,
     /// 相机拍摄的本地资源
     var localCameraAssetArray: [PhotoAsset] = []
     /// 相关配置
-    var config: PickerConfiguration = PhotoTools.getWXPickerConfig(isMoment: true)
+    var config: PickerConfiguration = PhotoTools.getBRPickerConfig()
     
     var localAssetArray: [PhotoAsset] = []
     

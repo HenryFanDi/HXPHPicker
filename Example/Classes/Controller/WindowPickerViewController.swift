@@ -12,7 +12,7 @@ class WindowPickerViewController: UIViewController {
     
     lazy var manager: PickerManager = {
         let manager = PickerManager()
-        manager.config = PhotoTools.getWXPickerConfig()
+        manager.config = PhotoTools.getBRPickerConfig()
         manager.config.photoList.cameraCell.cameraImageName = "hx_picker_photoList_photograph"
         manager.config.photoList.sort = .desc
         manager.config.photoList.backgroundColor = .white
@@ -97,7 +97,7 @@ class WindowPickerViewController: UIViewController {
     }()
     @objc func didFinishButtonClick(button: UIButton) {
         let pickerResultVC = PickerResultViewController()
-        pickerResultVC.config = PhotoTools.getWXPickerConfig()
+        pickerResultVC.config = PhotoTools.getBRPickerConfig()
         pickerResultVC.selectedAssets = pickerView.selectedAssets
         navigationController?.pushViewController(pickerResultVC, animated: true)
         if showPicker {
@@ -303,14 +303,14 @@ class WindowPickerViewController: UIViewController {
     @objc
     func openPickerController() {
         // 基本配置是一样的，可以直接用
-        let wxConfig = PhotoTools.getWXPickerConfig()
+        let wxConfig = PhotoTools.getBRPickerConfig()
         let vc = hx.present(
             picker: wxConfig,
             selectedAssets: pickerView.selectedAssets
         ) { [weak self] result, pickerController in
             pickerController.dismiss(animated: true) {
                 let pickerResultVC = PickerResultViewController()
-                pickerResultVC.config = PhotoTools.getWXPickerConfig()
+                pickerResultVC.config = PhotoTools.getBRPickerConfig()
                 pickerResultVC.selectedAssets = result.photoAssets
                 self?.navigationController?.pushViewController(pickerResultVC, animated: true)
             }
@@ -367,7 +367,7 @@ extension WindowPickerViewController: PhotoPickerViewDelegate {
         dismissCompletion result: PickerResult
     ) {
         let pickerResultVC = PickerResultViewController()
-        pickerResultVC.config = PhotoTools.getWXPickerConfig()
+        pickerResultVC.config = PhotoTools.getBRPickerConfig()
         pickerResultVC.selectedAssets = result.photoAssets
         navigationController?.pushViewController(pickerResultVC, animated: true)
     }

@@ -177,9 +177,7 @@ extension HomeViewController {
             case .collectionView:
                 return PickerResultViewController()
             case .customCell:
-                let config: PickerConfiguration = PhotoTools.getWXPickerConfig(
-                    isMoment: false
-                )
+                let config: PickerConfiguration = PhotoTools.getBRPickerConfig()
                 config.photoSelectionTapAction = .quickSelect
                 config.videoSelectionTapAction = .quickSelect
                 config.photoList.cell.customSingleCellClass = CustomPickerViewCell.self

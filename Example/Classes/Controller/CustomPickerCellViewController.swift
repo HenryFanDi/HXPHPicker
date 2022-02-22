@@ -10,7 +10,7 @@ import HXPHPicker
 
 class CustomPickerCellViewController: UIViewController {
     
-    let config: PickerConfiguration = PhotoTools.getWXPickerConfig(isMoment: false)
+    let config: PickerConfiguration = PhotoTools.getBRPickerConfig()
     
     override func viewDidLoad() {
         super.viewDidLoad()

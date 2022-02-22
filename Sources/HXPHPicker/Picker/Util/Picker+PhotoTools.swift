@@ -314,28 +314,21 @@ extension PhotoTools {
         return data
     }
     
-    /// 获取和微信主题一致的配置
     // swiftlint:disable function_body_length
-    public static func getWXPickerConfig(
-        isMoment: Bool = false
-    ) -> PickerConfiguration {
+    public static func getBRPickerConfig() -> PickerConfiguration {
         // swiftlint:enable function_body_length
         let config = PickerConfiguration()
         PhotoManager.shared.createLanguageBundle(languageType: config.languageType)
-        if isMoment {
-            config.maximumSelectedCount = 9
-            config.maximumSelectedVideoCount = 1
-            config.videoSelectionTapAction = .openEditor
-            config.allowSelectedTogether = false
-            config.maximumSelectedVideoDuration = 60
-        }else {
-            config.maximumSelectedVideoDuration = 480
-            config.maximumSelectedCount = 9
-            config.maximumSelectedVideoCount = 0
-            config.allowSelectedTogether = true
-        }
+        
+        config.maximumSelectedVideoCount = 1
+        config.selectMode = .single
+        config.allowSelectedTogether = false
+        config.photoSelectionTapAction = .quickSelect
+        config.videoSelectionTapAction = .quickSelect
+        config.selectOptions = .video
+        config.appearanceStyle = .dark
+        
         let wxColor = "#07C160".color
-        config.selectOptions = [.gifPhoto, .video]
         config.albumShowMode = .popup
         config.appearanceStyle = .normal
         config.navigationViewBackgroundColor = "#2E2F30".color
@@ -371,6 +364,7 @@ extension PhotoTools {
         config.photoList.cell.kf_indicatorColor = .white
         #endif
         
+        config.photoList.allowAddCamera = false
         config.photoList.cameraCell.backgroundColor = "#404040".color
         config.photoList.cameraCell.cameraImageName = "hx_picker_photoList_photograph_white"
         
