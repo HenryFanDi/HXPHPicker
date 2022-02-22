@@ -291,11 +291,14 @@ open class VideoEditorViewController: BaseViewController {
         cropConfirmView.delegate = self
         return cropConfirmView
     }()
+    
     lazy var topView: UIView = {
-        let view = UIView.init(frame: CGRect(x: 0, y: 0, width: 0, height: 44))
-        let cancelBtn = UIButton.init(frame: CGRect(x: 0, y: 0, width: 57, height: 44))
-        cancelBtn.setImage(UIImage.image(for: "hx_editor_back"), for: .normal)
+        let view = UIView(frame: CGRect(x: 30, y: 0, width: 24, height: 24))
+        let image = UIImage.image(for: "hx_video_edit_back")?.withRenderingMode(.alwaysTemplate)
+        let cancelBtn = UIButton(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
+        cancelBtn.setImage(image, for: .normal)
         cancelBtn.addTarget(self, action: #selector(didBackClick), for: .touchUpInside)
+        cancelBtn.tintColor = .white
         view.addSubview(cancelBtn)
         return view
     }()
@@ -482,34 +485,34 @@ open class VideoEditorViewController: BaseViewController {
 //        orientationDidChange = true
 //        videoViewDidChange = false
     }
+    
     open override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        let toolHeight = 32.0
+        let safeAreaInsetBottom = UIDevice.safeAreaInsets.bottom
         toolView.frame = CGRect(
             x: 0,
-            y: view.height - UIDevice.bottomMargin - 50,
+            y: view.height - safeAreaInsetBottom - toolHeight,
             width: view.width,
-            height: 50 + UIDevice.bottomMargin
+            height: toolHeight + safeAreaInsetBottom
         )
         toolView.reloadContentInset()
         topView.width = view.width
         topView.height = navigationController?.navigationBar.height ?? 44
-        if let modalPresentationStyle = navigationController?.modalPresentationStyle, UIDevice.isPortrait {
-            if modalPresentationStyle == .fullScreen || modalPresentationStyle == .custom {
-                topView.y = UIDevice.generalStatusBarHeight
-            }
-        }else if (modalPresentationStyle == .fullScreen || modalPresentationStyle == .custom) && UIDevice.isPortrait {
-            topView.y = UIDevice.generalStatusBarHeight
-        }
+        
+        topView.x = 30
+        topView.y = UIDevice.videoTopPadding
+        
         topMaskLayer.frame = CGRect(x: 0, y: 0, width: view.width, height: topView.frame.maxY + 10)
         cropView.frame = CGRect(x: 0, y: toolView.y - (UIDevice.isPortrait ? 100 : 90), width: view.width, height: 100)
         cropConfirmView.frame = toolView.frame
         if !videoView.frame.equalTo(view.bounds) && !videoView.frame.isEmpty && !videoViewDidChange {
-            videoView.frame = view.bounds
+            videoView.frame = CGRect(x: 0, y: UIDevice.previewTopPadding, width: view.bounds.width, height: view.bounds.height)
             videoView.reset(false)
             videoView.finishCropping(false)
             orientationDidChange = true
-        }else {
-            videoView.frame = view.bounds
+        } else {
+            videoView.frame = CGRect(x: 0, y: UIDevice.previewTopPadding, width: view.bounds.width, height: view.bounds.height)
         }
         if toolOptions.contains(.cropSize) {
             let cropToolFrame = CGRect(x: 0, y: toolView.y - 60, width: view.width, height: 60)
@@ -544,10 +547,11 @@ open class VideoEditorViewController: BaseViewController {
             if reqeustAssetCompletion {
                 setCropViewFrame()
             }
-        }else {
+        } else {
             setCropViewFrame()
         }
     }
+    
     open override var prefersStatusBarHidden: Bool {
         return config.prefersStatusBarHidden
     }

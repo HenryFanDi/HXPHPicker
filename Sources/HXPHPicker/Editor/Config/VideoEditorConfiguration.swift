@@ -78,7 +78,7 @@ open class VideoEditorConfiguration: EditorConfiguration {
             imageName: "hx_editor_tools_filter",
             type: .filter
         )
-        return .init(toolOptions: [graffiti, chartlet, text, music, cropSize, cropTime, filter])
+        return .init(toolOptions: [graffiti, text, cropTime, filter])
     }()
 }
 

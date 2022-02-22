@@ -179,7 +179,7 @@ class VideoEditorCropView: UIView {
         super.layoutSubviews()
         startTimeLb.frame = CGRect(x: validRectX, y: 0, width: 100, height: 20)
         endTimeLb.frame = CGRect(x: width - validRectX - 100, y: 0, width: 100, height: 20)
-        collectionView.frame = CGRect(x: 0, y: 20, width: width, height: itemHeight)
+        collectionView.frame = CGRect(x: 0, y: 20 + UIDevice.previewTopPadding, width: width, height: itemHeight)
         frameMaskView.frame = collectionView.frame
         totalTimeLb.frame = CGRect(x: 0, y: collectionView.frame.maxY, width: 100, height: 20)
         totalTimeLb.centerX = width * 0.5
