@@ -27,7 +27,7 @@ public struct PickerBottomViewConfiguration {
     public var barDarkStyle: UIBarStyle = UIBarStyle.black
     
     /// 隐藏预览按钮
-    public var previewButtonHidden: Bool = false
+    public var previewButtonHidden: Bool = true
     
     /// 预览按钮标题颜色
     public var previewButtonTitleColor: UIColor = .systemTintColor
@@ -42,7 +42,7 @@ public struct PickerBottomViewConfiguration {
     public var previewButtonDisableTitleDarkColor: UIColor?
     
     /// 隐藏原图按钮
-    public var originalButtonHidden: Bool = false
+    public var originalButtonHidden: Bool = true
     
     /// 原图按钮标题颜色
     public var originalButtonTitleColor: UIColor = .systemTintColor

@@ -14,7 +14,7 @@ class AlbumTitleView: UIControl {
    
    lazy var contentView: UIView = {
        let contentView = UIView.init(frame: CGRect(x: 0, y: 0, width: 0, height: 30))
-       contentView.layer.cornerRadius = 15
+       contentView.layer.cornerRadius = 8
        contentView.layer.masksToBounds = true
        contentView.isUserInteractionEnabled = false
        return contentView
@@ -53,7 +53,7 @@ class AlbumTitleView: UIControl {
    
    private lazy var titleLb: UILabel = {
         let text = "相册".localized
-        let font = UIFont.semiboldPingFang(ofSize: 18)
+        let font = UIFont.regularPingFang(ofSize: 16)
         let titleLb = UILabel(
             frame: CGRect(
                 x: 10,

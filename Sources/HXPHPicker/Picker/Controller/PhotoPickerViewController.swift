@@ -274,19 +274,21 @@ public class PhotoPickerViewController: BaseViewController {
             return
         }
     }
+    
     public override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         let margin: CGFloat = UIDevice.leftMargin
         collectionView.frame = CGRect(x: margin, y: 0, width: view.width - 2 * margin, height: view.height)
         var collectionTop: CGFloat = UIDevice.navigationBarHeight
+        let safeAreaInset = UIDevice.safeAreaInsets
         if let nav = navigationController {
             if nav.modalPresentationStyle == .fullScreen && UIDevice.isPortrait {
                 if UIApplication.shared.isStatusBarHidden {
                     collectionTop = nav.navigationBar.height + UIDevice.generalStatusBarHeight
-                }else {
+                } else {
                     collectionTop = UIDevice.navigationBarHeight
                 }
-            }else {
+            } else {
                 collectionTop = nav.navigationBar.height
             }
         }
@@ -294,7 +296,7 @@ public class PhotoPickerViewController: BaseViewController {
             if pickerController.config.albumShowMode == .popup {
                 albumBackgroudView.frame = view.bounds
                 updateAlbumViewFrame()
-            }else {
+            } else {
                 var titleWidth = titleLabel.text?.width(ofFont: titleLabel.font, maxHeight: 30) ?? 0
                 if titleWidth > view.width * 0.6 {
                     titleWidth = view.width * 0.6
@@ -304,27 +306,27 @@ public class PhotoPickerViewController: BaseViewController {
         }
         if isMultipleSelect {
             let promptHeight: CGFloat = (AssetManager.authorizationStatusIsLimited() &&
-                                            config.bottomView.showPrompt &&
-                                            allowLoadPhotoLibrary) ? 70 : 0
-            let bottomHeight: CGFloat = 50 + UIDevice.bottomMargin + promptHeight
+                                         config.bottomView.showPrompt &&
+                                         allowLoadPhotoLibrary) ? 70 : 0
+            let bottomHeight: CGFloat = 50 + safeAreaInset.bottom + promptHeight
             bottomView.frame = CGRect(x: 0, y: view.height - bottomHeight, width: view.width, height: bottomHeight)
             collectionView.contentInset = UIEdgeInsets(
-                top: collectionTop,
+                top: collectionTop + safeAreaInset.top,
                 left: 0,
-                bottom: bottomView.height + 0.5,
+                bottom: safeAreaInset.bottom,
                 right: 0
             )
             collectionView.scrollIndicatorInsets = UIEdgeInsets(
                 top: 0,
                 left: 0,
-                bottom: bottomHeight - UIDevice.bottomMargin,
+                bottom: safeAreaInset.bottom,
                 right: 0
             )
-        }else {
+        } else {
             collectionView.contentInset = UIEdgeInsets(
-                top: collectionTop,
+                top: collectionTop + safeAreaInset.top,
                 left: 0,
-                bottom: UIDevice.bottomMargin,
+                bottom: safeAreaInset.bottom,
                 right: 0
             )
         }
@@ -332,7 +334,7 @@ public class PhotoPickerViewController: BaseViewController {
         let count: CGFloat
         if  UIDevice.isPortrait == true {
             count = CGFloat(config.rowNumber)
-        }else {
+        } else {
             count = CGFloat(config.landscapeRowNumber)
         }
         let itemWidth = (collectionView.width - space * (count - CGFloat(1))) / count
@@ -356,6 +358,7 @@ public class PhotoPickerViewController: BaseViewController {
             y: (collectionView.height - collectionView.contentInset.top - collectionView.contentInset.bottom) * 0.5
         )
     }
+    
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         pickerController?.viewControllersWillAppear(self)
