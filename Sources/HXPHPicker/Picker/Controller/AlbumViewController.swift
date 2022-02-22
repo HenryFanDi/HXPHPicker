@@ -37,14 +37,14 @@ public class AlbumViewController: BaseViewController, UITableViewDataSource, UIT
         )
         promptLb.text = "只能查看允许访问的照片和相关相册".localized
         promptLb.textAlignment = .center
-        promptLb.font = UIFont.systemFont(ofSize: 14)
+        promptLb.font = Lato.regular.body
         promptLb.adjustsFontSizeToFitWidth = true
         promptLb.numberOfLines = 0
         return promptLb
     }()
     lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
-        titleLabel.font = UIFont.boldSystemFont(ofSize: 18)
+        titleLabel.font = Lato.bold.largeHeadline
         titleLabel.textAlignment = .center
         return titleLabel
     }()

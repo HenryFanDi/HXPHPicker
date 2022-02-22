@@ -46,6 +46,8 @@ open class CameraController: UINavigationController {
     /// 相机配置
     public let config: CameraConfiguration
     
+    private var cameraVC: CameraViewController?
+    
     /// 相机初始化
     /// - Parameters:
     ///   - config: 相机配置
@@ -60,11 +62,12 @@ open class CameraController: UINavigationController {
         cameraDelegate = delegate
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = config.modalPresentationStyle
-        let cameraVC = CameraViewController(
+        cameraVC = CameraViewController(
             config: config,
             type: type,
             delegate: self
         )
+        guard let cameraVC = cameraVC else { return }
         viewControllers = [cameraVC]
     }
     
@@ -97,18 +100,36 @@ open class CameraController: UINavigationController {
     open override var prefersStatusBarHidden: Bool {
         config.prefersStatusBarHidden
     }
+    
     open override var shouldAutorotate: Bool {
         config.shouldAutorotate
     }
+    
     open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         config.supportedInterfaceOrientations
     }
+    
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - Public
+    
+    func addTopRightItems(_ items: [UIView]) {
+        cameraVC?.addTopRightItems(items)
+    }
+    
+    func addBottomLeftItems(_ items: [UIView]) {
+        cameraVC?.addBottomLeftItems(items)
+    }
+    
+    func addBottomRightItems(_ items: [UIView]) {
+        cameraVC?.addBottomRightItems(items)
     }
 }
 
 extension CameraController: CameraViewControllerDelegate {
+    
     public func cameraViewController(
         _ cameraViewController: CameraViewController,
         didFinishWithResult result: CameraController.Result,
@@ -121,25 +142,37 @@ extension CameraController: CameraViewControllerDelegate {
             location: location
         )
     }
+    
     public func cameraViewController(didCancel cameraViewController: CameraViewController) {
         cameraDelegate?.cameraController(didCancel: self)
     }
+    
     public func cameraViewController(
         _ cameraViewController: CameraViewController,
         flashModeDidChanged flashMode: AVCaptureDevice.FlashMode
     ) {
         cameraDelegate?.cameraController(self, flashModeDidChanged: flashMode)
     }
+    
     public func cameraViewController(
         _ cameraViewController: CameraViewController,
         didSwitchCameraCompletion position: AVCaptureDevice.Position
     ) {
         cameraDelegate?.cameraController(self, didSwitchCameraCompletion: position)
     }
+    
     public func cameraViewController(
         _ cameraViewController: CameraViewController,
         didChangeTakeType takeType: CameraBottomViewTakeType
     ) {
         cameraDelegate?.cameraController(self, didChangeTakeType: takeType)
+    }
+    
+    public func cameraViewController(startRecording cameraViewController: CameraViewController) {
+        cameraDelegate?.cameraController(startRecording: self)
+    }
+    
+    public func cameraViewController(stopRecording cameraViewController: CameraViewController) {
+        cameraDelegate?.cameraController(stopRecording: self)
     }
 }

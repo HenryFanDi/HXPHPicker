@@ -23,7 +23,7 @@ class CustomPickerViewCell: PhotoPickerViewCell {
         let label = UILabel.init()
         label.textColor = UIColor(hexString: "#ffffff")
         label.textAlignment = .center
-        label.font = .boldSystemFont(ofSize: 35)
+        label.font = Lato.bold.largeTitle
         label.adjustsFontSizeToFitWidth = true
         return label
     }()

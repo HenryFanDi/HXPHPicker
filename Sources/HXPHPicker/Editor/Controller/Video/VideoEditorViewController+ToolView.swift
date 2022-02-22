@@ -94,7 +94,8 @@ extension VideoEditorViewController: EditorToolViewDelegate {
                     audioVolume: self.backgroundMusicVolume,
                        originalAudioVolume: self.hasOriginalSound ? self.videoVolume : 0,
                     exportPreset: self.config.exportPreset,
-                    videoQuality: self.config.videoQuality
+                    videoQuality: self.config.videoQuality,
+                    cameraPosition: self.config.cameraPosition
                 ) {  [weak self] videoURL, error in
                     if let videoURL = videoURL {
                         ProgressHUD.hide(forView: self?.view, animated: true)

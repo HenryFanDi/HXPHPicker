@@ -33,6 +33,7 @@ extension PhotoTools {
         originalAudioVolume: Float,
         exportPreset: ExportPreset,
         videoQuality: Int,
+        cameraPosition: CameraConfiguration.DevicePosition,
         completion: ((URL?, Error?) -> Void)?
     ) -> AVAssetExportSession? {
         var timeRang = timeRang
@@ -72,7 +73,8 @@ extension PhotoTools {
                     mixComposition: mixComposition,
                     cropSizeData: cropSizeData,
                     animationBeginTime: animationBeginTime,
-                    videoDuration: timeRang == .zero ? videoTrack.timeRange.duration.seconds : timeRang.duration.seconds
+                    videoDuration: timeRang == .zero ? videoTrack.timeRange.duration.seconds : timeRang.duration.seconds,
+                    cameraPosition: cameraPosition
                 )
                 if videoComposition.renderSize.width > 0 {
                     addVideoComposition = true
@@ -312,7 +314,8 @@ extension PhotoTools {
         mixComposition: AVMutableComposition,
         cropSizeData: VideoEditorCropSizeData,
         animationBeginTime: CFTimeInterval,
-        videoDuration: TimeInterval
+        videoDuration: TimeInterval,
+        cameraPosition: CameraConfiguration.DevicePosition
     ) throws -> AVMutableVideoComposition {
         let videoComposition = videoFixed(
             composition: mixComposition,
@@ -435,7 +438,8 @@ extension PhotoTools {
                 videoOrientation: videoAsset.videoOrientation,
                 cropSizeData: cropSizeData.canReset ? cropSizeData : nil,
                 filterInfo: cropSizeData.filter,
-                filterValue: cropSizeData.filterValue
+                filterValue: cropSizeData.filterValue,
+                cameraPosition: cameraPosition
             )
             newInstructions.append(newInstruction)
         }
@@ -449,7 +453,8 @@ extension PhotoTools {
                 videoOrientation: videoAsset.videoOrientation,
                 cropSizeData: cropSizeData.canReset ? cropSizeData : nil,
                 filterInfo: cropSizeData.filter,
-                filterValue: cropSizeData.filterValue
+                filterValue: cropSizeData.filterValue,
+                cameraPosition: cameraPosition
             )
             newInstructions.append(newInstruction)
         }
@@ -539,13 +544,13 @@ extension PhotoTools {
         for (index, lyric) in music.lyrics.enumerated() {
             let textLayer = CATextLayer()
             textLayer.string = lyric.lyric
-            let font = UIFont.boldSystemFont(ofSize: fontSize)
+            let font = Lato.bold.title2
             let lyricHeight = lyric.lyric.height(ofFont: font, maxWidth: size.width)
             if textSize.height < lyricHeight {
                 textSize.height = lyricHeight + 1
             }
             textLayer.font = font
-            textLayer.fontSize = fontSize
+            textLayer.fontSize = 24
             textLayer.isWrapped = true
             textLayer.truncationMode = .end
             textLayer.contentsScale = UIScreen.main.scale

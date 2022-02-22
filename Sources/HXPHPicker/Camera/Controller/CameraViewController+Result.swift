@@ -23,26 +23,29 @@ extension CameraViewController: CameraResultViewControllerDelegate {
             }
         }
     }
+    
     func didFinish(withImage image: UIImage) {
+        if autoDismiss {
+            dismiss(animated: true, completion: nil)
+        }
         delegate?.cameraViewController(
             self,
             didFinishWithResult: .image(image),
             location: currentLocation
         )
+    }
+    
+    func didFinish(withVideo videoURL: URL) {
         if autoDismiss {
             dismiss(animated: true, completion: nil)
         }
-    }
-    func didFinish(withVideo videoURL: URL) {
         delegate?.cameraViewController(
             self,
             didFinishWithResult: .video(videoURL),
             location: currentLocation
         )
-        if autoDismiss {
-            dismiss(animated: true, completion: nil)
-        }
     }
+    
     func saveCameraImage(_ image: UIImage) {
         let previewSize = previewView.size
         DispatchQueue.global().async {

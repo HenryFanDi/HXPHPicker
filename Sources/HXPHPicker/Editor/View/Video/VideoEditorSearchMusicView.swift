@@ -58,7 +58,7 @@ class VideoEditorSearchMusicView: UIView {
         let button = UIButton(type: .system)
         button.setTitle("取消".localized, for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 17)
+        button.titleLabel?.font = Lato.regular.largeHeadline
         button.addTarget(self, action: #selector(didCancelButtonClick), for: .touchUpInside)
         return button
     }()
@@ -68,7 +68,7 @@ class VideoEditorSearchMusicView: UIView {
     lazy var finishButton: UIButton = {
         let button = UIButton(type: .system)
         let title = "完成".localized
-        let font = UIFont.systemFont(ofSize: 16)
+        let font = Lato.regular.headline
         let image = UIImage.image(
             for: config.tintColor,
             havingSize: CGSize(
@@ -116,11 +116,11 @@ class VideoEditorSearchMusicView: UIView {
                 "搜索歌名".localized :
                 config.placeholder,
             attributes: [
-                .font: UIFont.systemFont(ofSize: 17),
+                .font: Lato.regular.largeHeadline,
                 .foregroundColor: UIColor.white.withAlphaComponent(0.4)
             ]
         )
-        view.font = .systemFont(ofSize: 17)
+        view.font = Lato.regular.largeHeadline
         view.clearButtonMode = .whileEditing
         view.returnKeyType = .search
         let searchIcon = UIImageView()

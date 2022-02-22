@@ -38,7 +38,7 @@ class AlbumView: UIView, UITableViewDataSource, UITableViewDelegate {
         let promptLb = UILabel.init(frame: CGRect(x: 0, y: 0, width: 0, height: 40))
         promptLb.text = "只能查看允许访问的照片和相关相册".localized
         promptLb.textAlignment = .center
-        promptLb.font = UIFont.systemFont(ofSize: 14)
+        promptLb.font = Lato.regular.body
         promptLb.adjustsFontSizeToFitWidth = true
         promptLb.numberOfLines = 0
         return promptLb

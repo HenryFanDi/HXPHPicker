@@ -76,7 +76,8 @@ class VideoFilterCompositor: NSObject, AVVideoCompositing {
         guard let sourcePixelBuffer = fixOrientation(
                 pixelBuffer,
                 instruction.videoOrientation,
-                instruction.cropSizeData
+                instruction.cropSizeData,
+                instruction.cameraPosition
               ),
               let resultPixelBuffer = applyFillter(
                 sourcePixelBuffer,
@@ -103,7 +104,8 @@ class VideoFilterCompositor: NSObject, AVVideoCompositing {
     func fixOrientation(
         _ pixelBuffer: CVPixelBuffer,
         _ videoOrientation: AVCaptureVideoOrientation,
-        _ cropSizeData: VideoEditorCropSizeData?
+        _ cropSizeData: VideoEditorCropSizeData?,
+        _ cameraPosition: CameraConfiguration.DevicePosition
     ) -> CVPixelBuffer? {
         var ciImage = CIImage(cvPixelBuffer: pixelBuffer)
         var size = CGSize(
@@ -112,7 +114,7 @@ class VideoFilterCompositor: NSObject, AVVideoCompositing {
         )
         switch videoOrientation {
         case .portrait:
-            ciImage = ciImage.oriented(.right)
+            ciImage = ciImage.oriented(cameraPosition == .front ? .leftMirrored : .right)
             size = .init(width: size.height, height: size.width)
         case .portraitUpsideDown:
             ciImage = ciImage.oriented(.left)
@@ -230,6 +232,7 @@ class VideoFilterCompositor: NSObject, AVVideoCompositing {
 }
 
 class CustomVideoCompositionInstruction: NSObject, AVVideoCompositionInstructionProtocol {
+    
     var timeRange: CMTimeRange
     
     var enablePostProcessing: Bool
@@ -241,10 +244,17 @@ class CustomVideoCompositionInstruction: NSObject, AVVideoCompositionInstruction
     var passthroughTrackID: CMPersistentTrackID
     
     let watermarkTrackID: CMPersistentTrackID?
+    
     let videoOrientation: AVCaptureVideoOrientation
+    
     let cropSizeData: VideoEditorCropSizeData?
+    
     let filterInfo: PhotoEditorFilterInfo?
+    
     let filterValue: Float
+    
+    let cameraPosition: CameraConfiguration.DevicePosition
+    
     init(
         sourceTrackIDs: [NSValue],
         watermarkTrackID: CMPersistentTrackID?,
@@ -252,7 +262,8 @@ class CustomVideoCompositionInstruction: NSObject, AVVideoCompositionInstruction
         videoOrientation: AVCaptureVideoOrientation,
         cropSizeData: VideoEditorCropSizeData?,
         filterInfo: PhotoEditorFilterInfo? = nil,
-        filterValue: Float = 0
+        filterValue: Float = 0,
+        cameraPosition: CameraConfiguration.DevicePosition
     ) {
         requiredSourceTrackIDs = sourceTrackIDs
         if let watermarkTrackID = watermarkTrackID {
@@ -267,6 +278,7 @@ class CustomVideoCompositionInstruction: NSObject, AVVideoCompositionInstruction
         self.cropSizeData = cropSizeData
         self.filterInfo = filterInfo
         self.filterValue = filterValue
+        self.cameraPosition = cameraPosition
         super.init()
     }
 }

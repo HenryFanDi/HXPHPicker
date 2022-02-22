@@ -58,16 +58,18 @@ extension PhotoPickerViewController: AlbumViewDelegate {
     }
     
     func updateAlbumViewFrame() {
-        self.albumView.size = CGSize(width: view.width, height: getAlbumViewHeight())
+        albumView.size = CGSize(width: view.width, height: getAlbumViewHeight())
+        
         if titleView.isSelected {
-            if self.navigationController?.modalPresentationStyle == UIModalPresentationStyle.fullScreen &&
-                UIDevice.isPortrait {
-                self.albumView.y = UIDevice.navigationBarHeight
-            }else {
-                self.albumView.y = self.navigationController?.navigationBar.height ?? 0
+            var navigationBarHeight: CGFloat
+            if navigationController?.modalPresentationStyle == UIModalPresentationStyle.fullScreen && UIDevice.isPortrait {
+                navigationBarHeight = UIDevice.navigationBarHeight
+            } else {
+                navigationBarHeight = navigationController?.navigationBar.height ?? 0
             }
-        }else {
-            self.albumView.y = -self.albumView.height
+            albumView.y = navigationBarHeight + UIDevice.safeAreaInsets.top
+        } else {
+            albumView.y = -albumView.height
         }
     }
     

@@ -496,6 +496,8 @@ extension CameraManager: AVCaptureFileOutputRecordingDelegate {
             completion(videoURL, NSError(domain: "connection is nil", code: 500, userInfo: nil))
             return
         }
+        connection.isVideoMirrored = activeCamera?.position == .front
+        
         videoDidStartRecording = didStart
         videoRecordingProgress = progress
         videoCompletion = completion

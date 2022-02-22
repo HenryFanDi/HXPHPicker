@@ -49,7 +49,6 @@ class HomeViewController: UITableViewController {
         if let rowType = rowType as? HomeRowType {
             if rowType == .camera {
                 let camerController = rowType.controller as! CameraController
-                camerController.autoDismiss = false
                 camerController.cameraDelegate = self
                 present(camerController, animated: true, completion: nil)
                 return
@@ -126,10 +125,21 @@ extension HomeViewController {
                     return EditorConfigurationViewController(style: .grouped)
                 }
             case .camera:
-                return CameraController(config: .init(), type: .all)
+                let config = CameraConfiguration()
+                config.modalPresentationStyle = .overFullScreen
+                config.position = .front
+                config.takePhotoMode = .click
+                config.languageType = .english
+                config.indicatorType = .circle
+                config.appearanceStyle = .dark
+                config.tintColor = UIColor(hexString: "6558FF")
+                
+                let cameraController = CameraController(config: config, type: .video)
+                return cameraController
             }
         }
     }
+    
     enum ApplicationRowType: CaseIterable, HomeRowTypeRule {
         case avatarPicker
         case preselectAsset
@@ -177,9 +187,7 @@ extension HomeViewController {
             case .collectionView:
                 return PickerResultViewController()
             case .customCell:
-                let config: PickerConfiguration = PhotoTools.getWXPickerConfig(
-                    isMoment: false
-                )
+                let config: PickerConfiguration = PhotoTools.getBRPickerConfig()
                 config.photoSelectionTapAction = .quickSelect
                 config.videoSelectionTapAction = .quickSelect
                 config.photoList.cell.customSingleCellClass = CustomPickerViewCell.self
@@ -223,6 +231,7 @@ extension UITableViewCell {
     }
 }
 extension HomeViewController: CameraControllerDelegate {
+    
     func cameraController(
         _ cameraController: CameraController,
         didFinishWithResult result: CameraController.Result,
@@ -241,4 +250,8 @@ extension HomeViewController: CameraControllerDelegate {
             self.navigationController?.pushViewController(pickerResultVC, animated: true)
         }
     }
+    
+    func cameraController(startRecording cameraController: CameraController) { }
+    
+    func cameraController(stopRecording cameraController: CameraController) { }
 }

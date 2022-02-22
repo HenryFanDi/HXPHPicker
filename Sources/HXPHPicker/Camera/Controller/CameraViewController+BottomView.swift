@@ -8,6 +8,7 @@
 import UIKit
 
 extension CameraViewController: CameraBottomViewDelegate {
+    
     func bottomView(beganTakePictures bottomView: CameraBottomView) {
         if !cameraManager.session.isRunning {
             return
@@ -20,11 +21,12 @@ extension CameraViewController: CameraBottomViewDelegate {
             if let data = data ,
                let image = UIImage(data: data) {
                 self.capturePhotoCompletion(image: image)
-            }else {
+            } else {
                 self.capturePhotoCompletion(image: nil)
             }
         }
     }
+    
     func capturePhotoCompletion(image: UIImage?) {
         if let image = image?.normalizedImage() {
             resetZoom()
@@ -37,13 +39,13 @@ extension CameraViewController: CameraBottomViewDelegate {
             #if HXPICKER_ENABLE_EDITOR
             if config.allowsEditing {
                 openPhotoEditor(image)
-            }else {
+            } else {
                 openPhotoResult(image)
             }
             #else
             openPhotoResult(image)
             #endif
-        }else {
+        } else {
             bottomView.isGestureEnable = true
             ProgressHUD.showWarning(
                 addedTo: self.view,
@@ -53,7 +55,10 @@ extension CameraViewController: CameraBottomViewDelegate {
             )
         }
     }
+    
     func bottomView(beganRecording bottomView: CameraBottomView) {
+        delegate?.cameraViewController(startRecording: self)
+        
         cameraManager.startRecording { [weak self] duration in
             self?.bottomView.startTakeMaskLayerPath(duration: duration)
         } progress: { [weak self] progress, time in
@@ -63,6 +68,7 @@ extension CameraViewController: CameraBottomViewDelegate {
             self.recordingCompletion(videoURL: videoURL, error: error)
         }
     }
+    
     func recordingCompletion(videoURL: URL, error: Error?) {
         bottomView.stopRecord()
         if error == nil {
@@ -76,14 +82,14 @@ extension CameraViewController: CameraBottomViewDelegate {
             saveCameraVideo(videoURL)
             #if HXPICKER_ENABLE_EDITOR
             if config.allowsEditing {
-                openVideoEditor(videoURL)
-            }else {
+                openVideoEditor(with: self.navigationController, videoURL: videoURL)
+            } else {
                 openVideoResult(videoURL)
             }
             #else
             openVideoResult(videoURL)
             #endif
-        }else {
+        } else {
             let text: String
             if let error = error as NSError?,
                error.code == 110 {
@@ -91,7 +97,7 @@ extension CameraViewController: CameraBottomViewDelegate {
                     format: "拍摄时长不足%d秒".localized,
                     arguments: [Int(config.videoMinimumDuration)]
                 )
-            }else {
+            } else {
                 text = "拍摄失败!".localized
             }
             ProgressHUD.showWarning(
@@ -102,32 +108,40 @@ extension CameraViewController: CameraBottomViewDelegate {
             )
         }
     }
+    
     func bottomView(endRecording bottomView: CameraBottomView) {
+        delegate?.cameraViewController(stopRecording: self)
         cameraManager.stopRecording()
     }
+    
     func bottomView(longPressDidBegan bottomView: CameraBottomView) {
         currentZoomFacto = previewView.effectiveScale
     }
+    
     func bottomView(_ bottomView: CameraBottomView, longPressDidChanged scale: CGFloat) {
         let remaining = previewView.maxScale - currentZoomFacto
         let zoomScale = currentZoomFacto + remaining * scale
         cameraManager.zoomFacto = zoomScale
     }
+    
     func bottomView(longPressDidEnded bottomView: CameraBottomView) {
         previewView.effectiveScale = cameraManager.zoomFacto
     }
+    
     func bottomView(didBackButton bottomView: CameraBottomView) {
         delegate?.cameraViewController(didCancel: self)
         if autoDismiss {
             dismiss(animated: true, completion: nil)
         }
     }
+    
     func bottomView(
         _ bottomView: CameraBottomView,
         didChangeTakeType takeType: CameraBottomViewTakeType
     ) {
         delegate?.cameraViewController(self, didChangeTakeType: takeType)
     }
+    
     func openPhotoResult(_ image: UIImage) {
         let vc = CameraResultViewController(
             image: image,
@@ -136,6 +150,7 @@ extension CameraViewController: CameraBottomViewDelegate {
         vc.delegate = self
         navigationController?.pushViewController(vc, animated: false)
     }
+    
     func openVideoResult(_ videoURL: URL) {
         let vc = CameraResultViewController(
             videoURL: videoURL,

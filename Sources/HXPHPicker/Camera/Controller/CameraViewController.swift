@@ -11,12 +11,17 @@ import AVFoundation
 
 /// 需要有导航栏
 open class CameraViewController: BaseViewController {
+    
+    // MARK: - Properties
+    
     public weak var delegate: CameraViewControllerDelegate?
     
     /// 相机配置
     public let config: CameraConfiguration
+    
     /// 相机类型
     public let type: CameraController.CaptureType
+    
     /// 内部自动dismiss
     public var autoDismiss: Bool = true
     
@@ -87,25 +92,52 @@ open class CameraViewController: BaseViewController {
         manager.requestWhenInUseAuthorization()
         return manager
     }()
+    
     var didLocation: Bool = false
+    
     var currentLocation: CLLocation?
+    
     var currentZoomFacto: CGFloat = 1
     
     private var requestCameraSuccess = false
+    
+    // MARK: - UI Components
+    
+    lazy var closeButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setImage("hx_camera_close".image, for: .normal)
+        button.addTarget(self, action: #selector(closeButtonDidTap(_:)), for: .touchUpInside)
+        button.size = button.currentImage?.size ?? .zero
+        button.tintColor = .white
+        button.imageView?.tintColor = .white
+        return button
+    }()
+    
+    lazy var topRightItemStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.isLayoutMarginsRelativeArrangement = true
+        stackView.layoutMargins = .zero
+        return stackView
+    }()
+    
+    // MARK: - Life Cycle
     
     open override func viewDidLoad() {
         super.viewDidLoad()
         title = ""
         extendedLayoutIncludesOpaqueBars = true
-        edgesForExtendedLayout = .all
+        
         view.backgroundColor = .black
-        navigationController?.navigationBar.tintColor = .white
-        DeviceOrientationHelper
-            .shared
-            .startDeviceOrientationNotifier()
+        navigationController?.setNavigationBarHidden(true, animated: false)
+        
+        DeviceOrientationHelper.shared.startDeviceOrientationNotifier()
+        
         if config.cameraType == .normal {
             view.addSubview(previewView)
         }
+        view.addSubview(closeButton)
+        view.addSubview(topRightItemStackView)
         view.addSubview(bottomView)
         
         if !UIImagePickerController.isSourceTypeAvailable(.camera) {
@@ -119,10 +151,11 @@ open class CameraViewController: BaseViewController {
             }
             return
         }
+        
         AssetManager.requestCameraAccess { isGranted in
             if isGranted {
                 self.setupCamera()
-            }else {
+            } else {
                 PhotoTools.showNotCameraAuthorizedAlert(viewController: self)
             }
         }
@@ -144,25 +177,7 @@ open class CameraViewController: BaseViewController {
         }
     }
     
-    @objc
-    public func didSwitchCameraClick() {
-        if config.cameraType == .normal {
-            do {
-                try cameraManager.switchCameras()
-            } catch {
-                print(error)
-                switchCameraFailed()
-            }
-            delegate?.cameraViewController(
-                self,
-                didSwitchCameraCompletion: cameraManager.activeCamera?.position ?? .unspecified
-            )
-            if !cameraManager.setFlashMode(config.flashMode) {
-                cameraManager.setFlashMode(.off)
-            }
-        }
-        resetZoom()
-    }
+    // MARK: - Public
     
     func switchCameraFailed() {
         ProgressHUD.showWarning(
@@ -200,7 +215,7 @@ open class CameraViewController: BaseViewController {
                 }
                 if !needAddAudio {
                     self.addOutputCompletion()
-                }else {
+                } else {
                     self.addAudioInput()
                 }
             } catch {
@@ -231,16 +246,16 @@ open class CameraViewController: BaseViewController {
                             self.addAudioInputFailed()
                         }
                     }
-                }else {
+                } else {
                     DispatchQueue.main.async {
                         PhotoTools.showAlert(
                             viewController: self,
                             title: "无法使用麦克风".localized,
                             message: "请在设置-隐私-相机中允许访问麦克风".localized,
                             leftActionTitle: "取消".localized,
-                        leftHandler: { alertAction in
-                            self.addAudioInputFailed()
-                        },
+                            leftHandler: { alertAction in
+                                self.addAudioInputFailed()
+                            },
                             rightActionTitle: "设置".localized
                         ) { alertAction in
                             PhotoTools.openSettingsURL()
@@ -275,31 +290,31 @@ open class CameraViewController: BaseViewController {
     
     func sessionCompletion() {
         if config.cameraType == .normal {
-            if cameraManager.canSwitchCameras() {
-                addSwithCameraButton()
-            }
             previewView.setupGestureRecognizer()
-        }else {
-            addSwithCameraButton()
         }
         bottomView.addGesture(for: type)
         startLocation()
+        
         if #available(iOS 13.0, *) {
-        }else {
+        } else {
             previewView.removeMask()
             bottomView.hiddenTip()
             bottomView.isGestureEnable = true
         }
     }
     
-    func addSwithCameraButton() {
-        view.layer.addSublayer(topMaskLayer)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
-            image: "hx_camera_overturn".image,
-            style: .plain,
-            target: self,
-            action: #selector(didSwitchCameraClick)
-        )
+    func addTopRightItems(_ items: [UIView]) {
+        items.forEach {
+            topRightItemStackView.addArrangedSubview($0)
+        }
+    }
+    
+    func addBottomLeftItems(_ items: [UIView]) {
+        bottomView.addLeftItems(items)
+    }
+    
+    func addBottomRightItems(_ items: [UIView]) {
+        bottomView.addRightItems(items)
     }
     
     @objc open override func deviceOrientationDidChanged(notify: Notification) {
@@ -313,19 +328,9 @@ open class CameraViewController: BaseViewController {
     
     open override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        guard let nav = navigationController else {
-            return
-        }
-        let navHeight = nav.navigationBar.frame.maxY
-        nav.navigationBar.setBackgroundImage(
-            UIImage.image(
-                for: .clear,
-                havingSize: CGSize(width: view.width, height: navHeight)
-            ),
-            for: .default
-        )
-        nav.navigationBar.shadowImage = UIImage()
+        navigationController?.setNavigationBarHidden(true, animated: false)
     }
+    
     open override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if requestCameraSuccess {
@@ -334,6 +339,7 @@ open class CameraViewController: BaseViewController {
             }
         }
     }
+    
     open override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         PhotoManager.shared.saveCameraPreview()
@@ -344,22 +350,23 @@ open class CameraViewController: BaseViewController {
     
     func layoutSubviews() {
         let previewRect: CGRect
+        let previewTopPadding = UIDevice.previewTopPadding
         if UIDevice.isPad || !UIDevice.isPortrait {
             if UIDevice.isPad {
                 previewRect = view.bounds
-            }else {
+            } else {
                 let size = CGSize(width: view.height * 16 / 9, height: view.height)
                 previewRect = CGRect(
                     x: (view.width - size.width) * 0.5,
-                    y: (view.height - size.height) * 0.5,
+                    y: (view.height - size.height) * 0.5 + previewTopPadding,
                     width: size.width, height: size.height
                 )
             }
-        }else {
+        } else {
             let size = CGSize(width: view.width, height: view.width / 9 * 16)
             previewRect = CGRect(
                 x: (view.width - size.width) * 0.5,
-                y: (view.height - size.height) * 0.5,
+                y: (view.height - size.height) * 0.5 + previewTopPadding,
                 width: size.width, height: size.height
             )
         }
@@ -372,10 +379,10 @@ open class CameraViewController: BaseViewController {
         if UIDevice.isPortrait && !UIDevice.isPad {
             if UIDevice.isAllIPhoneX {
                 bottomY = view.height - 110 - previewRect.minY
-            }else {
+            } else {
                 bottomY = view.height - bottomHeight
             }
-        }else {
+        } else {
             bottomY = view.height - bottomHeight
         }
         bottomView.frame = CGRect(
@@ -384,6 +391,16 @@ open class CameraViewController: BaseViewController {
             width: view.width,
             height: bottomHeight
         )
+        closeButton.frame = CGRect(x: 30, y: UIDevice.videoTopPadding, width: 24, height: 24)
+        
+        let navRightStackViewWidth = view.width / 2.0
+        topRightItemStackView.frame = CGRect(
+            x: view.width - navRightStackViewWidth,
+            y: UIDevice.videoTopPadding,
+            width: navRightStackViewWidth,
+            height: 24
+        )
+        
         if let nav = navigationController {
             topMaskLayer.frame = CGRect(
                 x: 0,
@@ -407,10 +424,71 @@ open class CameraViewController: BaseViewController {
     required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
     deinit {
         if allowLocation && didLocation {
             locationManager.stopUpdatingLocation()
         }
         DeviceOrientationHelper.shared.stopDeviceOrientationNotifier()
+    }
+    
+    // MARK: - Actions
+    
+    @objc
+    private func closeButtonDidTap(_ button: UIButton) {
+        delegate?.cameraViewController(didCancel: self)
+        
+        if autoDismiss {
+            dismiss(animated: true, completion: nil)
+        }
+    }
+    
+    @objc
+    public func didTapFlip() {
+        if config.cameraType == .normal {
+            do {
+                try cameraManager.switchCameras()
+            } catch {
+                print(error)
+                switchCameraFailed()
+            }
+            delegate?.cameraViewController(
+                self,
+                didSwitchCameraCompletion: cameraManager.activeCamera?.position ?? .unspecified
+            )
+            if !cameraManager.setFlashMode(config.flashMode) {
+                cameraManager.setFlashMode(.off)
+            }
+        }
+        config.position = config.position == .front ? .back : .front
+        resetZoom()
+    }
+    
+    @objc
+    public func didTapUpload() {
+        let config: PickerConfiguration = PhotoTools.getBRPickerConfig()
+        config.languageType = .english
+        
+        let pickerController = PhotoPickerController(picker: config)
+        pickerController.pickerDelegate = self
+        pickerController.autoDismiss = false
+        pickerController.modalPresentationStyle = .overFullScreen
+        present(pickerController, animated: true)
+    }
+}
+
+// MARK: - PhotoPickerControllerDelegate
+
+extension CameraViewController: PhotoPickerControllerDelegate {
+    
+    public func pickerController(_ pickerController: PhotoPickerController, didFinishSelection result: PickerResult) {
+        result.getVideoURL { [weak self] urls in
+            guard let self = self, let url = urls.first else { return }
+            self.openVideoEditor(with: pickerController, videoURL: url)
+        }
+    }
+    
+    public func pickerController(didCancel pickerController: PhotoPickerController) {
+        pickerController.dismiss(animated: true)
     }
 }

@@ -282,9 +282,10 @@ class PhotoEditorFilterViewCell: UICollectionViewCell {
     lazy var filterNameLb: UILabel = {
         let label = UILabel.init()
         label.textColor = .white
-        label.font = UIFont.systemFont(ofSize: 12)
+        label.font = Lato.regular.caption
         label.textAlignment = .center
-        label.numberOfLines = 0
+        label.numberOfLines = 1
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
     
@@ -304,7 +305,7 @@ class PhotoEditorFilterViewCell: UICollectionViewCell {
     }
     var filter: PhotoEditorFilter! {
         didSet {
-            filterNameLb.text = filter.filterName
+            filterNameLb.text = filter.filterName.localized
             selectedView.isHidden = !filter.isSelected
             if !filter.isOriginal {
                 imageView.image = delegate?.filterViewCell(fetchFilter: self)
@@ -328,10 +329,13 @@ class PhotoEditorFilterViewCell: UICollectionViewCell {
         imageView.frame = CGRect(x: 4, y: 4, width: width - 8, height: width - 8)
         selectedView.frame = CGRect(x: 0, y: 0, width: width, height: width)
         let filterNameY = imageView.frame.maxY + 12
-        var filterNameHeight = filterNameLb.text?.height(ofFont: filterNameLb.font, maxWidth: width) ?? 15
-        if filterNameHeight > height - filterNameY {
-            filterNameHeight = height - filterNameY
-        }
+        let filterNameHeight = 16.0
+        
+//        var filterNameHeight = filterNameLb.text?.height(ofFont: filterNameLb.font, maxWidth: width) ?? 15
+//        if filterNameHeight > height - filterNameY {
+//            filterNameHeight = height - filterNameY
+//        }
+        
         filterNameLb.frame = CGRect(x: 0, y: filterNameY, width: width, height: filterNameHeight)
     }
     

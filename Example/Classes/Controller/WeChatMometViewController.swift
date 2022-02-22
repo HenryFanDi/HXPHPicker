@@ -21,7 +21,7 @@ class WeChatMometViewController: UIViewController {
     }()
     @objc func didImageViewClick() {
         isImage = true
-        let config = PhotoTools.getWXPickerConfig(isMoment: true)
+        let config = PhotoTools.getBRPickerConfig()
         config.selectOptions = .photo
         config.selectMode = .single
         config.photoSelectionTapAction = .openEditor
@@ -70,9 +70,7 @@ class WeChatMometViewController: UIViewController {
             present(nav, animated: true, completion: nil)
             return
         }
-        let config = PhotoTools.getWXPickerConfig(
-            isMoment: true
-        )
+        let config = PhotoTools.getBRPickerConfig()
         config.maximumSelectedVideoDuration = 60
         presentPicker(config)
     }

@@ -28,7 +28,7 @@ class WeChatViewController: UIViewController {
         return button
     }()
     @objc func didPickerClick() {
-        let config = PhotoTools.getWXPickerConfig()
+        let config = PhotoTools.getBRPickerConfig()
         let picker = PhotoPickerController(
             picker: config,
             delegate: self

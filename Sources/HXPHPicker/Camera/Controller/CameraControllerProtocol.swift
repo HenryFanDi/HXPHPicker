@@ -43,6 +43,10 @@ public protocol CameraControllerDelegate: AnyObject {
         _ cameraController: CameraController,
         didChangeTakeType takeType: CameraBottomViewTakeType
     )
+    
+    func cameraController(startRecording cameraController: CameraController)
+    
+    func cameraController(stopRecording cameraController: CameraController)
 }
 
 public extension CameraControllerDelegate {
@@ -56,23 +60,31 @@ public extension CameraControllerDelegate {
             cameraController.dismiss(animated: true)
         }
     }
+    
     func cameraController(didCancel cameraController: CameraController) {
         if !cameraController.autoDismiss {
             cameraController.dismiss(animated: true)
         }
     }
+    
     func cameraController(
         _ cameraController: CameraController,
         flashModeDidChanged flashMode: AVCaptureDevice.FlashMode
     ) { }
+    
     func cameraController(
         _ cameraController: CameraController,
         didSwitchCameraCompletion position: AVCaptureDevice.Position
     ) { }
+    
     func cameraController(
         _ cameraController: CameraController,
         didChangeTakeType takeType: CameraBottomViewTakeType
     ) { }
+    
+    func cameraController(startRecording cameraController: CameraController) { }
+    
+    func cameraController(stopRecording cameraController: CameraController) { }
 }
 
 public protocol CameraViewControllerDelegate: AnyObject {
@@ -109,9 +121,14 @@ public protocol CameraViewControllerDelegate: AnyObject {
         _ cameraViewController: CameraViewController,
         didChangeTakeType takeType: CameraBottomViewTakeType
     )
+    
+    func cameraViewController(startRecording cameraViewController: CameraViewController)
+    
+    func cameraViewController(stopRecording cameraViewController: CameraViewController)
 }
 
 public extension CameraViewControllerDelegate {
+    
     func cameraViewController(
         _ cameraViewController: CameraViewController,
         didFinishWithResult result: CameraController.Result,
@@ -121,23 +138,31 @@ public extension CameraViewControllerDelegate {
             cameraViewController.dismiss(animated: true)
         }
     }
+    
     func cameraViewController(didCancel cameraViewController: CameraViewController) {
         if !cameraViewController.autoDismiss {
             cameraViewController.dismiss(animated: true)
         }
     }
+    
     func cameraViewController(
         _ cameraViewController: CameraViewController,
         flashModeDidChanged flashMode: AVCaptureDevice.FlashMode
     ) { }
+    
     func cameraViewController(
         _ cameraViewController: CameraViewController,
         didSwitchCameraCompletion position: AVCaptureDevice.Position
     ) { }
+    
     func cameraViewController(
         _ cameraViewController: CameraViewController,
         didChangeTakeType takeType: CameraBottomViewTakeType
     ) { }
+    
+    func cameraViewController(startRecording cameraViewController: CameraViewController) { }
+    
+    func cameraViewController(stopRecording cameraViewController: CameraViewController) { }
 }
 
 protocol CameraResultViewControllerDelegate: AnyObject {

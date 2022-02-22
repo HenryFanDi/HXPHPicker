@@ -36,10 +36,10 @@ public struct PhotoListConfiguration {
     public var cancelPosition: PhotoPickerViewController.CancelPosition = .right
     
     /// 取消按钮图片名
-    public var cancelImageName: String = "hx_picker_photolist_cancel"
+    public var cancelImageName: String = "hx_camera_close"
     
     /// 暗黑模式下取消按钮图片名
-    public var cancelDarkImageName: String = "hx_picker_photolist_cancel"
+    public var cancelDarkImageName: String = "hx_camera_close"
     
     /// 每行显示数量
     public var rowNumber: Int = UIDevice.isPad ? 5 : 4

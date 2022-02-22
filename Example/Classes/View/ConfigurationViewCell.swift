@@ -11,7 +11,7 @@ class ConfigurationViewCell: UITableViewCell {
     
     private(set) lazy var titleLabel: UILabel = {
         let view = UILabel(frame: .zero)
-        view.font = UIFont.systemFont(ofSize: 15, weight: .regular)
+        view.font = Lato.regular.headline
         view.adjustsFontSizeToFitWidth = true
         if #available(iOS 13.0, *) {
             view.textColor = UIColor.label
@@ -25,7 +25,7 @@ class ConfigurationViewCell: UITableViewCell {
     
     private(set) lazy var tagsButton: UIButton = {
         let view = UIButton(frame: .zero)
-        view.titleLabel?.font = UIFont.systemFont(ofSize: 11, weight: .medium)
+        view.titleLabel?.font = Lato.bold.caption
         view.setTitleColor(UIColor.systemBlue, for: .normal)
         if #available(iOS 13.0, *) {
             view.backgroundColor = UIColor.tertiarySystemGroupedBackground
@@ -42,7 +42,7 @@ class ConfigurationViewCell: UITableViewCell {
     
     private(set) lazy var contentLabel: UILabel = {
         let view = UILabel(frame: .zero)
-        view.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        view.font = Lato.regular.body
         view.text = ""
         view.numberOfLines = 2
         view.adjustsFontSizeToFitWidth = true

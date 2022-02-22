@@ -48,6 +48,8 @@ open class VideoEditorConfiguration: EditorConfiguration {
     /// 裁剪确认视图配置
     public lazy var cropConfirmView: CropConfirmViewConfiguration = .init()
     
+    public lazy var cameraPosition: CameraConfiguration.DevicePosition = .back
+    
     /// 工具视图配置
     public lazy var toolView: EditorToolViewConfiguration = {
         let graffiti = EditorToolOptions(
@@ -78,7 +80,7 @@ open class VideoEditorConfiguration: EditorConfiguration {
             imageName: "hx_editor_tools_filter",
             type: .filter
         )
-        return .init(toolOptions: [graffiti, chartlet, text, music, cropSize, cropTime, filter])
+        return .init(toolOptions: [graffiti, text, cropTime, filter])
     }()
 }
 
