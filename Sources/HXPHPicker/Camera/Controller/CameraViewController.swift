@@ -101,16 +101,14 @@ open class CameraViewController: BaseViewController {
     
     private var requestCameraSuccess = false
     
-    // MARK: - UI Components
+    // MARK: - UI Components()
     
-    lazy var closeButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setImage("hx_camera_close".image, for: .normal)
-        button.addTarget(self, action: #selector(closeButtonDidTap(_:)), for: .touchUpInside)
-        button.size = button.currentImage?.size ?? .zero
-        button.tintColor = .white
-        button.imageView?.tintColor = .white
-        return button
+    lazy var topLeftItemStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.isLayoutMarginsRelativeArrangement = true
+        stackView.layoutMargins = .zero
+        return stackView
     }()
     
     lazy var topRightItemStackView: UIStackView = {
@@ -136,7 +134,7 @@ open class CameraViewController: BaseViewController {
         if config.cameraType == .normal {
             view.addSubview(previewView)
         }
-        view.addSubview(closeButton)
+        view.addSubview(topLeftItemStackView)
         view.addSubview(topRightItemStackView)
         view.addSubview(bottomView)
         
@@ -303,6 +301,12 @@ open class CameraViewController: BaseViewController {
         }
     }
     
+    func addTopLeftItems(_ items: [UIView]) {
+        items.forEach {
+            topLeftItemStackView.addArrangedSubview($0)
+        }
+    }
+    
     func addTopRightItems(_ items: [UIView]) {
         items.forEach {
             topRightItemStackView.addArrangedSubview($0)
@@ -391,13 +395,19 @@ open class CameraViewController: BaseViewController {
             width: view.width,
             height: bottomHeight
         )
-        closeButton.frame = CGRect(x: 30, y: UIDevice.videoTopPadding, width: 24, height: 24)
         
-        let navRightStackViewWidth = view.width / 2.0
-        topRightItemStackView.frame = CGRect(
-            x: view.width - navRightStackViewWidth,
+        let navStackViewWidth = view.width / 2.0
+        topLeftItemStackView.frame = CGRect(
+            x: 0.0,
             y: UIDevice.videoTopPadding,
-            width: navRightStackViewWidth,
+            width: navStackViewWidth,
+            height: 24
+        )
+        
+        topRightItemStackView.frame = CGRect(
+            x: topLeftItemStackView.frame.maxX,
+            y: UIDevice.videoTopPadding,
+            width: navStackViewWidth,
             height: 24
         )
         
@@ -414,9 +424,11 @@ open class CameraViewController: BaseViewController {
     open override var prefersStatusBarHidden: Bool {
         config.prefersStatusBarHidden
     }
+    
     open override var shouldAutorotate: Bool {
         config.shouldAutorotate
     }
+    
     open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         config.supportedInterfaceOrientations
     }
@@ -435,7 +447,7 @@ open class CameraViewController: BaseViewController {
     // MARK: - Actions
     
     @objc
-    private func closeButtonDidTap(_ button: UIButton) {
+    public func closeDidTap() {
         delegate?.cameraViewController(didCancel: self)
         
         if autoDismiss {

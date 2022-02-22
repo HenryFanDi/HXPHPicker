@@ -115,6 +115,10 @@ open class CameraController: UINavigationController {
     
     // MARK: - Public
     
+    func addTopLeftItems(_ items: [UIView]) {
+        cameraVC?.addTopLeftItems(items)
+    }
+    
     func addTopRightItems(_ items: [UIView]) {
         cameraVC?.addTopRightItems(items)
     }
