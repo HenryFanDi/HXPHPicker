@@ -33,6 +33,7 @@ extension PhotoTools {
         originalAudioVolume: Float,
         exportPreset: ExportPreset,
         videoQuality: Int,
+        cameraPosition: CameraConfiguration.DevicePosition,
         completion: ((URL?, Error?) -> Void)?
     ) -> AVAssetExportSession? {
         var timeRang = timeRang
@@ -72,7 +73,8 @@ extension PhotoTools {
                     mixComposition: mixComposition,
                     cropSizeData: cropSizeData,
                     animationBeginTime: animationBeginTime,
-                    videoDuration: timeRang == .zero ? videoTrack.timeRange.duration.seconds : timeRang.duration.seconds
+                    videoDuration: timeRang == .zero ? videoTrack.timeRange.duration.seconds : timeRang.duration.seconds,
+                    cameraPosition: cameraPosition
                 )
                 if videoComposition.renderSize.width > 0 {
                     addVideoComposition = true
@@ -312,7 +314,8 @@ extension PhotoTools {
         mixComposition: AVMutableComposition,
         cropSizeData: VideoEditorCropSizeData,
         animationBeginTime: CFTimeInterval,
-        videoDuration: TimeInterval
+        videoDuration: TimeInterval,
+        cameraPosition: CameraConfiguration.DevicePosition
     ) throws -> AVMutableVideoComposition {
         let videoComposition = videoFixed(
             composition: mixComposition,
@@ -435,7 +438,8 @@ extension PhotoTools {
                 videoOrientation: videoAsset.videoOrientation,
                 cropSizeData: cropSizeData.canReset ? cropSizeData : nil,
                 filterInfo: cropSizeData.filter,
-                filterValue: cropSizeData.filterValue
+                filterValue: cropSizeData.filterValue,
+                cameraPosition: cameraPosition
             )
             newInstructions.append(newInstruction)
         }
@@ -449,7 +453,8 @@ extension PhotoTools {
                 videoOrientation: videoAsset.videoOrientation,
                 cropSizeData: cropSizeData.canReset ? cropSizeData : nil,
                 filterInfo: cropSizeData.filter,
-                filterValue: cropSizeData.filterValue
+                filterValue: cropSizeData.filterValue,
+                cameraPosition: cameraPosition
             )
             newInstructions.append(newInstruction)
         }

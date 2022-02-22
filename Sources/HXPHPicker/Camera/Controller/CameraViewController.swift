@@ -460,6 +460,7 @@ open class CameraViewController: BaseViewController {
                 cameraManager.setFlashMode(.off)
             }
         }
+        config.position = config.position == .front ? .back : .front
         resetZoom()
     }
     

@@ -33,7 +33,10 @@ extension CameraViewController: PhotoEditorViewControllerDelegate {
 extension CameraViewController: VideoEditorViewControllerDelegate {
     
     func openVideoEditor(with nav: UINavigationController?, videoURL: URL) {
-        let videoEditorViewController = VideoEditorViewController(videoURL: videoURL, config: config.videoEditor)
+        let videoEditorConfig = config.videoEditor
+        videoEditorConfig.cameraPosition = config.position
+        
+        let videoEditorViewController = VideoEditorViewController(videoURL: videoURL, config: videoEditorConfig)
         videoEditorViewController.autoBack = autoDismiss
         videoEditorViewController.delegate = self
         nav?.pushViewController(videoEditorViewController, animated: true)
