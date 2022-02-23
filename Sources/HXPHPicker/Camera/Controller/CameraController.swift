@@ -115,20 +115,34 @@ open class CameraController: UINavigationController {
     
     // MARK: - Public
     
-    func addTopLeftItems(_ items: [UIView]) {
+    public func addTopLeftItems(_ items: [UIView]) {
         cameraVC?.addTopLeftItems(items)
     }
     
-    func addTopRightItems(_ items: [UIView]) {
+    public func addTopRightItems(_ items: [UIView]) {
         cameraVC?.addTopRightItems(items)
     }
     
-    func addBottomLeftItems(_ items: [UIView]) {
+    public func addBottomLeftItems(_ items: [UIView]) {
         cameraVC?.addBottomLeftItems(items)
     }
     
-    func addBottomRightItems(_ items: [UIView]) {
+    public func addBottomRightItems(_ items: [UIView]) {
         cameraVC?.addBottomRightItems(items)
+    }
+    
+    // MARK: - Actions
+    
+    public func closeDidTap() {
+        cameraVC?.closeDidTap()
+    }
+    
+    public func didTapFlip() {
+        cameraVC?.didTapFlip()
+    }
+    
+    public func didTapUpload() {
+        cameraVC?.didTapUpload()
     }
 }
 
